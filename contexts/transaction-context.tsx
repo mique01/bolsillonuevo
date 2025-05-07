@@ -89,8 +89,40 @@ export const useTransactions = () => {
   return context
 }
 
+// Función de utilidad para recuperar datos del localStorage de manera segura
+const getFromLocalStorage = <T,>(key: string, defaultValue: T): T => {
+  if (typeof window === 'undefined') return defaultValue;
+  
+  try {
+    const item = window.localStorage.getItem(key);
+    if (item) {
+      const parsed = JSON.parse(item);
+      console.log(`Cargado ${key} desde localStorage:`, parsed);
+      return parsed;
+    }
+  } catch (error) {
+    console.error(`Error al cargar ${key} desde localStorage:`, error);
+  }
+  
+  return defaultValue;
+};
+
+// Función de utilidad para guardar datos en localStorage de manera segura
+const setToLocalStorage = (key: string, value: any): void => {
+  if (typeof window === 'undefined') return;
+  
+  try {
+    const serialized = JSON.stringify(value);
+    window.localStorage.setItem(key, serialized);
+    console.log(`Guardado ${key} en localStorage:`, value);
+  } catch (error) {
+    console.error(`Error al guardar ${key} en localStorage:`, error);
+  }
+};
+
 export const TransactionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { t } = useTranslation()
+  const [initialized, setInitialized] = useState(false)
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [budgets, setBudgets] = useState<Budget[]>([])
   const [expenseCategories, setExpenseCategories] = useState<Category[]>([])
@@ -101,99 +133,78 @@ export const TransactionProvider: React.FC<{ children: React.ReactNode }> = ({ c
     to: new Date(),
   })
 
+  // Cargar datos al inicio
   useEffect(() => {
-    const savedTransactions = localStorage.getItem("transactions")
-    if (savedTransactions) {
-      try {
-        const parsedTransactions = JSON.parse(savedTransactions).map((t: any) => ({
+    const loadData = () => {
+      // Cargar transacciones
+      const savedTransactions = getFromLocalStorage<any[]>("transactions", [])
+      if (savedTransactions.length > 0) {
+        const parsedTransactions = savedTransactions.map((t) => ({
           ...t,
           date: new Date(t.date),
         }))
         setTransactions(parsedTransactions)
-        console.log("Transacciones cargadas correctamente:", parsedTransactions.length)
-      } catch (error) {
-        console.error("Error parsing transactions from localStorage:", error)
-        // No eliminar datos, solo registrar el error
-        // localStorage.removeItem("transactions")
+        console.log("Transacciones cargadas:", parsedTransactions.length)
       }
-    } else {
-      console.log("No hay transacciones guardadas en localStorage")
+
+      // Cargar presupuestos
+      const savedBudgets = getFromLocalStorage<Budget[]>("budgets", [])
+      setBudgets(savedBudgets)
+      
+      // Cargar categorías de gastos
+      const savedExpenseCategories = getFromLocalStorage<Category[]>("expenseCategories", [])
+      setExpenseCategories(savedExpenseCategories)
+      
+      // Cargar categorías de ingresos
+      const savedIncomeCategories = getFromLocalStorage<Category[]>("incomeCategories", [])
+      setIncomeCategories(savedIncomeCategories)
+      
+      // Cargar métodos de pago
+      const savedPaymentMethods = getFromLocalStorage<PaymentMethod[]>("paymentMethods", [])
+      setPaymentMethods(savedPaymentMethods)
+      
+      setInitialized(true)
     }
 
-    const savedBudgets = localStorage.getItem("budgets")
-    if (savedBudgets) {
-      try {
-        const parsedBudgets = JSON.parse(savedBudgets)
-        setBudgets(parsedBudgets)
-      } catch (error) {
-        console.error("Error parsing budgets from localStorage:", error)
-        // No eliminar datos, solo registrar el error
-        // localStorage.removeItem("budgets")
-      }
+    if (!initialized) {
+      loadData()
     }
+  }, [initialized])
 
-    const savedExpenseCategories = localStorage.getItem("expenseCategories")
-    if (savedExpenseCategories) {
-      try {
-        setExpenseCategories(JSON.parse(savedExpenseCategories))
-      } catch (error) {
-        console.error("Error parsing expense categories from localStorage:", error)
-        // No eliminar datos, solo registrar el error
-        // localStorage.removeItem("expenseCategories")
-        setExpenseCategories([])
-      }
-    } else {
-      setExpenseCategories([])
+  // Guardar transacciones cuando cambien
+  useEffect(() => {
+    if (initialized) {
+      setToLocalStorage("transactions", transactions)
     }
+  }, [transactions, initialized])
 
-    const savedIncomeCategories = localStorage.getItem("incomeCategories")
-    if (savedIncomeCategories) {
-      try {
-        setIncomeCategories(JSON.parse(savedIncomeCategories))
-      } catch (error) {
-        console.error("Error parsing income categories from localStorage:", error)
-        // No eliminar datos, solo registrar el error
-        // localStorage.removeItem("incomeCategories")
-        setIncomeCategories([])
-      }
-    } else {
-      setIncomeCategories([])
+  // Guardar presupuestos cuando cambien
+  useEffect(() => {
+    if (initialized) {
+      setToLocalStorage("budgets", budgets)
     }
+  }, [budgets, initialized])
 
-    const savedPaymentMethods = localStorage.getItem("paymentMethods")
-    if (savedPaymentMethods) {
-      try {
-        setPaymentMethods(JSON.parse(savedPaymentMethods))
-      } catch (error) {
-        console.error("Error parsing payment methods from localStorage:", error)
-        // No eliminar datos, solo registrar el error
-        // localStorage.removeItem("paymentMethods")
-        setPaymentMethods([])
-      }
-    } else {
-      setPaymentMethods([])
+  // Guardar categorías de gastos cuando cambien
+  useEffect(() => {
+    if (initialized) {
+      setToLocalStorage("expenseCategories", expenseCategories)
     }
-  }, [t])
+  }, [expenseCategories, initialized])
 
+  // Guardar categorías de ingresos cuando cambien
   useEffect(() => {
-    localStorage.setItem("transactions", JSON.stringify(transactions))
-  }, [transactions])
+    if (initialized) {
+      setToLocalStorage("incomeCategories", incomeCategories)
+    }
+  }, [incomeCategories, initialized])
 
+  // Guardar métodos de pago cuando cambien
   useEffect(() => {
-    localStorage.setItem("budgets", JSON.stringify(budgets))
-  }, [budgets])
-
-  useEffect(() => {
-    localStorage.setItem("expenseCategories", JSON.stringify(expenseCategories))
-  }, [expenseCategories])
-
-  useEffect(() => {
-    localStorage.setItem("incomeCategories", JSON.stringify(incomeCategories))
-  }, [incomeCategories])
-
-  useEffect(() => {
-    localStorage.setItem("paymentMethods", JSON.stringify(paymentMethods))
-  }, [paymentMethods])
+    if (initialized) {
+      setToLocalStorage("paymentMethods", paymentMethods)
+    }
+  }, [paymentMethods, initialized])
 
   const filteredTransactions = React.useMemo(() => {
     if (!dateRange.from || !dateRange.to) return transactions
