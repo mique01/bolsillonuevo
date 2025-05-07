@@ -5,7 +5,6 @@ import { CalendarRange, CreditCard, DollarSign, PieChart, Plus, Wallet } from "l
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DateRangePicker } from "@/components/date-range-picker"
 import { ExpenseVsIncome } from "@/components/charts/expense-vs-income"
 import { ExpenseByCategory } from "@/components/charts/expense-by-category"
@@ -108,105 +107,61 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </div>
-        <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="overview">{t("overview")}</TabsTrigger>
-            <TabsTrigger value="analytics">{t("analytics")}</TabsTrigger>
-            <TabsTrigger value="budget">{t("budget")}</TabsTrigger>
-          </TabsList>
-          <TabsContent value="overview" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <Card className="col-span-2">
-                <CardHeader>
-                  <CardTitle>{t("expenses.vs.income")}</CardTitle>
-                  <CardDescription>{t("expenses.vs.income.description")}</CardDescription>
-                </CardHeader>
-                <CardContent className="h-80">
-                  <ExpenseVsIncome />
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t("expenses.by.category")}</CardTitle>
-                  <CardDescription>{t("expenses.by.category.description")}</CardDescription>
-                </CardHeader>
-                <CardContent className="h-80">
-                  <ExpenseByCategory />
-                </CardContent>
-              </Card>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-              <Card className="col-span-4">
-                <CardHeader>
-                  <CardTitle>{t("expenses.vs.budget")}</CardTitle>
-                  <CardDescription>{t("expenses.vs.budget.description")}</CardDescription>
-                </CardHeader>
-                <CardContent className="h-80">
-                  <ExpenseVsBudget />
-                </CardContent>
-              </Card>
-              <Card className="col-span-3">
-                <CardHeader>
-                  <CardTitle>{t("recent.transactions")}</CardTitle>
-                  <CardDescription>{t("recent.transactions.description")}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <RecentTransactions />
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-          <TabsContent value="analytics" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-              <Card className="col-span-4">
-                <CardHeader>
-                  <CardTitle>{t("spending.trends")}</CardTitle>
-                  <CardDescription>{t("spending.trends.description")}</CardDescription>
-                </CardHeader>
-                <CardContent className="h-80">
-                  <div className="flex h-full items-center justify-center">
-                    <PieChart className="h-16 w-16 text-muted-foreground/50" />
-                    <p className="ml-4 text-muted-foreground">{t("analytics.coming.soon")}</p>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="col-span-3">
-                <CardHeader>
-                  <CardTitle>{t("savings.rate")}</CardTitle>
-                  <CardDescription>{t("savings.rate.description")}</CardDescription>
-                </CardHeader>
-                <CardContent className="h-80">
-                  <div className="flex h-full items-center justify-center">
-                    <CalendarRange className="h-16 w-16 text-muted-foreground/50" />
-                    <p className="ml-4 text-muted-foreground">{t("analytics.coming.soon")}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-          <TabsContent value="budget" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-              <Card className="col-span-4">
-                <CardHeader>
-                  <CardTitle>{t("monthly.budget.analysis")}</CardTitle>
-                  <CardDescription>{t("monthly.budget.analysis.description")}</CardDescription>
-                </CardHeader>
-                <CardContent className="h-80">
-                  <MonthlyBudgetChart />
-                </CardContent>
-              </Card>
-              <Card className="col-span-3">
-                <CardHeader>
-                  <CardTitle>{t("expenses.vs.budget")}</CardTitle>
-                  <CardDescription>{t("expenses.vs.budget.description")}</CardDescription>
-                </CardHeader>
-                <CardContent className="h-80">
-                  <ExpenseVsBudget />
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-        </Tabs>
+        
+        <div className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <Card className="col-span-2">
+              <CardHeader>
+                <CardTitle>{t("expenses.vs.income")}</CardTitle>
+                <CardDescription>{t("expenses.vs.income.description")}</CardDescription>
+              </CardHeader>
+              <CardContent className="h-80">
+                <ExpenseVsIncome />
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("expenses.by.category")}</CardTitle>
+                <CardDescription>{t("expenses.by.category.description")}</CardDescription>
+              </CardHeader>
+              <CardContent className="h-80">
+                <ExpenseByCategory />
+              </CardContent>
+            </Card>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+            <Card className="col-span-4">
+              <CardHeader>
+                <CardTitle>{t("expenses.vs.budget")}</CardTitle>
+                <CardDescription>{t("expenses.vs.budget.description")}</CardDescription>
+              </CardHeader>
+              <CardContent className="h-80">
+                <ExpenseVsBudget />
+              </CardContent>
+            </Card>
+            <Card className="col-span-3">
+              <CardHeader>
+                <CardTitle>{t("recent.transactions")}</CardTitle>
+                <CardDescription>{t("recent.transactions.description")}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <RecentTransactions />
+              </CardContent>
+            </Card>
+          </div>
+          
+          <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-1">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("monthly.budget.analysis")}</CardTitle>
+                <CardDescription>{t("monthly.budget.analysis.description")}</CardDescription>
+              </CardHeader>
+              <CardContent className="h-80">
+                <MonthlyBudgetChart />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
 
       <Dialog open={showTransactionDialog} onOpenChange={setShowTransactionDialog}>
