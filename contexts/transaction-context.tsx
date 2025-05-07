@@ -140,24 +140,10 @@ export const TransactionProvider: React.FC<{ children: React.ReactNode }> = ({ c
         console.error("Error parsing expense categories from localStorage:", error)
         // No eliminar datos, solo registrar el error
         // localStorage.removeItem("expenseCategories")
-        setExpenseCategories([
-          { id: "housing", name: t("category.housing") },
-          { id: "food", name: t("category.food") },
-          { id: "transportation", name: t("category.transportation") },
-          { id: "entertainment", name: t("category.entertainment") },
-          { id: "utilities", name: t("category.utilities") },
-          { id: "other", name: t("category.other") },
-        ])
+        setExpenseCategories([])
       }
     } else {
-      setExpenseCategories([
-        { id: "housing", name: t("category.housing") },
-        { id: "food", name: t("category.food") },
-        { id: "transportation", name: t("category.transportation") },
-        { id: "entertainment", name: t("category.entertainment") },
-        { id: "utilities", name: t("category.utilities") },
-        { id: "other", name: t("category.other") },
-      ])
+      setExpenseCategories([])
     }
 
     const savedIncomeCategories = localStorage.getItem("incomeCategories")
@@ -168,22 +154,10 @@ export const TransactionProvider: React.FC<{ children: React.ReactNode }> = ({ c
         console.error("Error parsing income categories from localStorage:", error)
         // No eliminar datos, solo registrar el error
         // localStorage.removeItem("incomeCategories")
-        setIncomeCategories([
-          { id: "salary", name: t("category.salary") },
-          { id: "freelance", name: t("category.freelance") },
-          { id: "investment", name: t("category.investment") },
-          { id: "gift", name: t("category.gift") },
-          { id: "other", name: t("category.other") },
-        ])
+        setIncomeCategories([])
       }
     } else {
-      setIncomeCategories([
-        { id: "salary", name: t("category.salary") },
-        { id: "freelance", name: t("category.freelance") },
-        { id: "investment", name: t("category.investment") },
-        { id: "gift", name: t("category.gift") },
-        { id: "other", name: t("category.other") },
-      ])
+      setIncomeCategories([])
     }
 
     const savedPaymentMethods = localStorage.getItem("paymentMethods")
@@ -194,22 +168,10 @@ export const TransactionProvider: React.FC<{ children: React.ReactNode }> = ({ c
         console.error("Error parsing payment methods from localStorage:", error)
         // No eliminar datos, solo registrar el error
         // localStorage.removeItem("paymentMethods")
-        setPaymentMethods([
-          { id: "cash", name: t("payment.cash") },
-          { id: "credit", name: t("payment.credit") },
-          { id: "debit", name: t("payment.debit") },
-          { id: "bank", name: t("payment.bank") },
-          { id: "mobile", name: t("payment.mobile") },
-        ])
+        setPaymentMethods([])
       }
     } else {
-      setPaymentMethods([
-        { id: "cash", name: t("payment.cash") },
-        { id: "credit", name: t("payment.credit") },
-        { id: "debit", name: t("payment.debit") },
-        { id: "bank", name: t("payment.bank") },
-        { id: "mobile", name: t("payment.mobile") },
-      ])
+      setPaymentMethods([])
     }
   }, [t])
 

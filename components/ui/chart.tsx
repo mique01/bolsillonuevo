@@ -1,13 +1,5 @@
-export { Cell } from "recharts"
-export { Legend } from "recharts"
-export { Pie } from "recharts"
-export { PieChart } from "recharts"
-export { ResponsiveContainer } from "recharts"
-export { Tooltip } from "recharts"
-export { Bar } from "recharts"
-export { BarChart } from "recharts"
-export { CartesianGrid } from "recharts"
-export { XAxis } from "recharts"
-export { YAxis } from "recharts"
-export { Line } from "recharts"
-export { LineChart } from "recharts"
+// Exportar todos los componentes necesarios de recharts
+export { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+export type { TooltipProps } from "recharts"
+// Re-exportar los tipos que puedan ser utilizados en los componentes
+export type { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
