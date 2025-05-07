@@ -9,7 +9,7 @@ import { DateRangePicker } from "@/components/date-range-picker"
 import { ExpenseVsIncome } from "@/components/charts/expense-vs-income"
 import { ExpenseByCategory } from "@/components/charts/expense-by-category"
 import { ExpenseVsBudget } from "@/components/charts/expense-vs-budget"
-import { MonthlyBudgetChart } from "@/components/charts/monthly-budget-chart"
+import { Progress } from "@/components/ui/progress"
 import { RecentTransactions } from "@/components/recent-transactions"
 import { ModeToggle } from "@/components/mode-toggle"
 import { LanguageToggle } from "@/components/language-toggle"
@@ -23,7 +23,7 @@ import { formatCurrency } from "@/lib/formatting"
 export default function DashboardPage() {
   const { t } = useTranslation()
   const [showTransactionDialog, setShowTransactionDialog] = useState(false)
-  const { totalIncome, totalExpenses, totalBalance } = useTransactions()
+  const { totalIncome, totalExpenses, totalBalance, budgetUsagePercentage, totalBudget } = useTransactions()
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -153,11 +153,19 @@ export default function DashboardPage() {
           <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-1">
             <Card>
               <CardHeader>
-                <CardTitle>{t("monthly.budget.analysis")}</CardTitle>
-                <CardDescription>{t("monthly.budget.analysis.description")}</CardDescription>
+                <CardTitle>{t("budget.usage")}</CardTitle>
+                <CardDescription>{t("budget.usage.description") || t("expenses.vs.budget.description")}</CardDescription>
               </CardHeader>
-              <CardContent className="h-80">
-                <MonthlyBudgetChart />
+              <CardContent className="py-6">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-xl font-bold">
+                    {budgetUsagePercentage ? budgetUsagePercentage.toFixed(1) : 0}%
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    ${formatCurrency(totalExpenses)} / ${formatCurrency(totalBudget)}
+                  </div>
+                </div>
+                <Progress value={budgetUsagePercentage || 0} className="h-4" />
               </CardContent>
             </Card>
           </div>
